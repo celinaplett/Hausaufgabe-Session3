@@ -2,7 +2,7 @@
 title: "Hausaufgabe Session 4"
 output: html_document
 --- 
-#Laden der Libraries und Daten 
+Laden der Libraries und Daten 
 ```{r}
 library(tidyverse)
 library(e1071)
@@ -27,7 +27,7 @@ Bitte erstellen Sie ein Notebook mit weiteren Features (Alter, Geschlecht und Kl
 (titanic.df <- titanic %>%
   select(survived,pclass,sex,age,embarked,parch,sibsp))
 ```
-
+Algorithmus 1, Support Vector: 
 ```{r}
 titanic.df <- titanic.df %>%
   mutate(age = as.numeric(str_replace(age,",",".")))
@@ -50,10 +50,6 @@ titanic.df <- titanic.df %>%
 ```{r}
 titanic.df <- titanic.df %>%
   mutate(embarked = ifelse(embarked == "S", 1, 0))
-```
-```{r}
-titanic.df <- titanic.df %>%
-  mutate(sex = ifelse(sex == "female", 1, 0))
 ```
 
 ```{r}
@@ -88,7 +84,7 @@ pROC_obj <- roc(test.results$survived, test.results$pred,
             plot=TRUE, auc.polygon=TRUE, max.auc.polygon=TRUE, grid=TRUE,
             print.auc=TRUE, show.thres=TRUE)
 ```
-# Naive Bayes
+Algorithmus 2: Naive Bayes
 
 ```{r}
 my_training <- training %>%
@@ -129,7 +125,7 @@ pROC_obj <- roc(as.numeric(as.character(test.results$survived)), test.results$pr
             plot=TRUE, auc.polygon=TRUE, max.auc.polygon=TRUE, grid=TRUE,
             print.auc=TRUE, show.thres=TRUE)
 ```
-# Decision Tree
+Algorithmus 3: Decision Tree
 
 ```{r}
 library(rpart)
@@ -162,9 +158,13 @@ pROC_obj <- roc(model.results.dt$survived,model.results.dt$`1`,
 Aufgabe 2: 
 Was sind die Unterschiede in der Performance der Algorithmen?
 
-Die Performance des Naive Bayes ist am schlechtesten. Die Performance von dem Decision Tree sowie dem 1. Algorithmus liegen dagegen sehr nah beieinander. Generell lässt sich sagen, dass die Werte alle über 0,500 liegen und insgesamt nur um maximal 0,1 AUC auseinanderliegen. Zudem hat der erste Algorithmus eine sehr unregelmäßige Kurve, wohingegen die anderen beiden Graphen eine sehr regelmäßige Kurve aufzeigen. 
+Die Performance des Naive Bayes ist am schlechtesten. Die Performance von dem Decision Tree sowie dem 1. Algorithmus liegen dagegen sehr nah beieinander. Generell lässt sich sagen, dass die Werte alle über 0,5 liegen. Das System entscheidet daher in keinem der Fälle zufällig. Zudem hat der erste Algorithmus eine sehr unregelmäßige Kurve, wohingegen die anderen beiden Graphen eine sehr regelmäßige Kurve aufzeigen. 
 
 Aufgabe 3: 
 Finden Sie Erklärungen dafür.
 
-Die Unterschiede der Ergebnisse der Algorithmen liegen nur sehr gering auseinander. Dies könnte daran liegen, dass die Datensätze sehr sauber sind. Je größer der AUC-Wert ist, desto besser ist das Modell für den Datensatz geeignet. In diesem Fall sind also der 1. Algorithmus sowie der Decision Tree besser geeignet, als der Naive Bayes Alogrithmus. 
+Die Unterschiede der Ergebnisse der Algorithmen liegen nur sehr gering auseinander. Dies könnte daran liegen, dass die Datensätze sehr sauber sind. Zudem gilt, je größer der AUC-Wert ist, desto besser ist das Modell für den Datensatz geeignet. In diesem Fall sind also der 1. Algorithmus (Support Vecotr) sowie der Decision Tree besser geeignet, als der Naive Bayes Alogrithmus. Jedoch unterliegt keiner der Algorithmen einer rein zufälligen Zuordnung (0,5). 
+
+Ein weiterer Faktor, welcher erklärt weshalb der 1. Algorithmus besser funktioniert ist, dass dieser gut für viele Variablen geeignet ist, welche in diesem Fall vorhanden sind. 
+Der Naive Bayes Algorithmus kann dagegen besser mit geringeren Datenmengen umgehen, daher kann es sein, dass diese Performance hier schlechter abschneidet, da sehr viele Daten verwendet werden. 
+Der Decision Tree hat generell nur eine geringe Performanceleistung und ist anfällig für Overfitting, weshalb vermutlich eine starke Ähnlichkeit zum 1. Alogrithmus besteht. 
